@@ -5,6 +5,8 @@ import { getBuildingIdentity } from './services/buildings'
 class App extends Component {
   state = {
     isLoading: false,
+    imageToIdentify: null,
+    imageToIdentifyPreviwUrl: '',
     buildingIdentity: '',
   }
 
@@ -25,10 +27,37 @@ class App extends Component {
       })
     }
   }
+
+  importImageToIdentify = (e) => {
+    e.preventDefault()
+    const reader = new FileReader()
+    const file = e.target.files[0]
+    reader.onloadend = () => {
+      this.setState({
+        imageToIdentify: file,
+        imageToIdentifyPreviwUrl: reader.result,
+      })
+    }
+    reader.readAsDataURL(file)
+  }
   render() {
-    const { isLoading, buildingIdentity } = this.state
+    const {
+      isLoading,
+      buildingIdentity,
+      imageToIdentify,
+      imageToIdentifyPreviwUrl,
+    } = this.state
     return (
       <div className="App">
+        <input
+          onChange={this.importImageToIdentify}
+          type="file"
+          src={imageToIdentify}
+          alt="Importer l'image a identifier"
+        />
+        {imageToIdentifyPreviwUrl ? (
+          <img src={imageToIdentifyPreviwUrl} alt="à identifier" />
+        ) : null}
         {isLoading ? (
           <h1>Veuillez patienter...</h1>
         ) : (
