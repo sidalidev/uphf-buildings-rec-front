@@ -1,28 +1,42 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import { getBuildingIdentity } from './services/buildings'
 
 class App extends Component {
+  state = {
+    isLoading: false,
+    buildingIdentity: '',
+  }
+
+  async componentDidMount() {
+    this.setState({
+      isLoading: true,
+    })
+    try {
+      const { data } = await getBuildingIdentity()
+      this.setState({
+        buildingIdentity: data,
+        isLoading: false,
+      })
+    } catch (error) {
+      console.error('getBuildingIdentity ERROR', error)
+      this.setState({
+        isLoading: false,
+      })
+    }
+  }
   render() {
+    const { isLoading, buildingIdentity } = this.state
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {isLoading ? (
+          <h1>Veuillez patienter...</h1>
+        ) : (
+          <h1>{buildingIdentity}</h1>
+        )}
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
