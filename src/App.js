@@ -10,12 +10,12 @@ class App extends Component {
     buildingIdentity: '',
   }
 
-  async componentDidMount() {
+  getBuildingIdentity = async () => {
     this.setState({
       isLoading: true,
     })
     try {
-      const { data } = await getBuildingIdentity()
+      const { data } = await getBuildingIdentity(this.state.imageToIdentify)
       this.setState({
         buildingIdentity: data,
         isLoading: false,
@@ -63,6 +63,7 @@ class App extends Component {
         ) : (
           <h1>{buildingIdentity}</h1>
         )}
+        <button onClick={this.getBuildingIdentity}>Identifier</button>
       </div>
     )
   }
